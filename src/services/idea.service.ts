@@ -28,6 +28,12 @@ export class IdeaService {
         return prismaClient.idea.findMany();
     }
 
+    async findIdeaById(id: string) {
+        return prismaClient.idea.findUnique({
+            where: { id }
+        });
+    }
+
     async updateIdea(id: string, data: UpdateIdeaInput) {
         const idea = await prismaClient.idea.findUnique({
             where: { id }
