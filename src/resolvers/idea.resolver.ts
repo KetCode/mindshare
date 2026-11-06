@@ -1,4 +1,4 @@
-import { Arg, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from "type-graphql";
+import { Arg, FieldResolver, Mutation, Query, Resolver, Root, UseMiddleware } from "type-graphql";
 import { IdeaModel } from "../models/idea.model";
 import { CreateIdeaInput, UpdateIdeaInput } from "../dtos/input/idea.input";
 import { IdeaService } from "../services/idea.service";
@@ -28,6 +28,19 @@ export class IdeaResolver {
         @Arg('id', () => String) id: string
     ): Promise<IdeaModel> {
         return this.ideaService.updateIdea(id, data)
+    }
+
+    @Mutation(() => Boolean)
+    async deleteIdea(
+        @Arg('id', () => String) id: string
+    ): Promise<boolean> {
+        await this.ideaService.deleteIdea(id)
+        return true
+    }
+
+    @Query(() => [IdeaModel])
+    async listIdeas(): Promise<IdeaModel[]> {
+        return this.ideaService.listIdeas()
     }
 
     @FieldResolver(() => UserModel)

@@ -12,6 +12,22 @@ export class IdeaService {
         });
     }
 
+    async deleteIdea(id: string) {
+        const idea = await prismaClient.idea.findUnique({
+            where: { id }
+        });
+
+        if (!idea) throw new Error("Idea não encontrada.");
+
+        return prismaClient.idea.delete({
+            where: { id }
+        });
+    }
+
+    async listIdeas() {
+        return prismaClient.idea.findMany();
+    }
+
     async updateIdea(id: string, data: UpdateIdeaInput) {
         const idea = await prismaClient.idea.findUnique({
             where: { id }
