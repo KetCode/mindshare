@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  owner
+  admin
+  member
+  viewer
+}
+
 model User {
   id        String    @id @default(uuid())
   name      String
@@ -17,6 +24,8 @@ model User {
   ideas     Idea[]
   votes     Vote[]
   comments  Comment[]
+
+  role Role @default(member)
 }
 
 model Idea {
