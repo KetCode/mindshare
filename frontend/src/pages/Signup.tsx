@@ -11,14 +11,31 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import logo from "@/assets/logo.svg"
 import { Link } from "react-router-dom"
+import { useAuthStore } from "@/stores/auth"
+import { toast } from "sonner"
 
 export function Signup() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async () => {
-    
+  const signup = useAuthStore((state) => state.signup)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+        const signupMutate = await signup({ name, email, password })
+        if(signupMutate) {
+            toast.success('Cadastro realizado com sucesso!')
+        }
+    } catch (error: any) {
+        toast.error('Erro ao realizar o cadastro')
+    } finally {
+        setLoading(false)
+    }
   }
 
   return (
@@ -65,7 +82,7 @@ export function Signup() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={!name || !email || !password}>
+            <Button type="submit" className="w-full" disabled={!name || !email || !password || loading}>
               Cadastrar
             </Button>
           </form>

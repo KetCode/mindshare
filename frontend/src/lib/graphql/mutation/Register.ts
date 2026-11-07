@@ -10,7 +10,7 @@ export const REGISTER = gql`
             name
             email
             createdAt
-            udpateAt
+            updatedAt
         }
     }
   }
