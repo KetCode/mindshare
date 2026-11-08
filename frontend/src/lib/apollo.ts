@@ -9,7 +9,7 @@ const httpLink = new HttpLink({
 const authLink = new SetContextLink((prevContext) => {
   const token = useAuthStore.getState().token
   return {
-    header: {
+    headers: {
       ...prevContext.headers,
       authorization: token ? `Bearer ${token}` : "",
     }
@@ -17,6 +17,6 @@ const authLink = new SetContextLink((prevContext) => {
 })
 
 export const apolloClient = new ApolloClient({
-  link: ApolloLink.from([httpLink, authLink]),
+  link: ApolloLink.from([authLink, httpLink]),
   cache: new InMemoryCache()
 })

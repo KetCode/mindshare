@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "./pages/auth/Login"
 import { Signup } from "./pages/auth/Signup"
 import { useAuthStore } from "./stores/auth"
-import { IdeasPage } from "./pages/idea"
+import { IdeasPage } from "./pages/ideas"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore()

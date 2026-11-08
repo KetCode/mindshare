@@ -49,6 +49,11 @@ export class IdeaResolver {
         return await this.ideaService.listIdeas()
     }
 
+    @Query(() => IdeaModel)
+    async getIdea(@Arg('id', () => String) id: string): Promise<IdeaModel> {
+        return this.ideaService.getIdea(id)
+    }
+
     @FieldResolver(() => UserModel)
     async author(@Root() idea: IdeaModel): Promise<UserModel> {
         return await this.userService.findUser(idea.authorId)
