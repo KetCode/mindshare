@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 import { useMutation } from '@apollo/client/react'
-import { CREATE_IDEA } from "@/lib/graphql/mutation/Idea"
+import { CREATE_IDEA } from "@/lib/graphql/mutations/Idea"
 import { toast } from "sonner"
 
 interface CreateIdeaDialogProps {

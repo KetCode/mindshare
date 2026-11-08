@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { apolloClient } from '@/lib/apollo'
-import { REGISTER } from '@/lib/graphql/mutation/Register'
+import { REGISTER } from '@/lib/graphql/mutations/Register'
 import type { LoginInput, RegisterInput, User } from '@/types'
-import { LOGIN } from '@/lib/graphql/mutation/Login'
+import { LOGIN } from '@/lib/graphql/mutations/Login'
 
 type RegisterMutationData = {
     register: {
@@ -27,6 +27,7 @@ interface AuthState {
     isAuthenticated: boolean
     signup: (data: RegisterInput) => Promise<boolean>
     login: (data: LoginInput) => Promise<boolean>
+    logout: () => void
 }
 
 export const useAuthStore = create<AuthState>() (
@@ -101,7 +102,16 @@ export const useAuthStore = create<AuthState>() (
                     console.log('Erro ao fazer o cadastro')
                     throw error
                 }
+            },
+            logout: () => {
+                set({
+                    user: null,
+                    token: null,
+                    isAuthenticated: false
+                })
+                apolloClient.clearStore()
             }
+
         }),
         {
             name: 'auth-storage',
