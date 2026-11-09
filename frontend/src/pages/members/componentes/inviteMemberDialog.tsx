@@ -1,11 +1,5 @@
 import { useState } from "react"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -18,13 +12,10 @@ interface InviteMemberProps {
   onCreated?: () => void
 }
 
-export function InviteMemberDialog({
-  open,
-  onOpenChange,
-  onCreated,
-}: InviteMemberProps) {
+export function InviteMemberDialog({ open, onOpenChange, onCreated }: InviteMemberProps) {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
+  
   const [createUserMutation, { loading }] = useMutation(CREATE_USER, {
     onCompleted: () => {
       onOpenChange(false)
@@ -54,31 +45,16 @@ export function InviteMemberDialog({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="invite-name">Nome</Label>
-            <Input
-              id="invite-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Nome do usuário"
-            />
+            <Input id="invite-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do usuário" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="invite-email">E-mail</Label>
-            <Input
-              id="invite-email"
-              value={email}
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="email@exemplo.com"
-            />
+            <Input id="invite-email" value={email} type="email" onChange={(e) => setEmail(e.target.value)} placeholder="email@exemplo.com" />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancelar
-          </Button>
-          <Button onClick={handleSubmit} disabled={!name || !email || loading}>
-            Convidar
-          </Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button onClick={handleSubmit} disabled={!name || !email || loading}>Convidar</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

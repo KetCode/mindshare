@@ -13,7 +13,7 @@ export const CREATE_USER = gql`
 `
 
 export const UPDATE_USER = gql`
-    mutation UpdateUser($id: String!, $data: CreateUserInput!){
+    mutation UpdateUser($id: String!, $data: UpdateUserInput!){
         updateUser(id: $id, data: $data){
             id
             name

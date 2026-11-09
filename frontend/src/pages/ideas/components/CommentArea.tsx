@@ -25,7 +25,7 @@ export function CommentArea({commentContent, setCommentContent, handleAddComment
                 <div className="flex-1 space-y-3">
                     <Textarea placeholder="Digite um comentário" value={commentContent} onChange={(e) => setCommentContent(e.target.value)} rows={3} className="resize-none" />
                     <div className="flex items-center justify-between">
-                        <Button variant="outline" onClick={handleVote} disabled={!user} className={`${idea?.votes?.some((v) => v.userId === user?.id) ? "bg-green-100 border-green-600 text-green-800" : "border-zinc-200 text-muted-foreground"} hover:bg-green-100 hover:border-green-600 hover:text-green-800`}>
+                        <Button variant="outline" onClick={handleVote} disabled={!user} className={`${idea?.votes?.some((v) => v.userId === user?.id) ? "bg-green-100 border-green-600 text-green-800" : "border-zinc-200 text-muted-foreground font-normal"} hover:bg-green-100 hover:border-green-600 hover:text-green-800`}>
                             <ThumbsUp className="mr-2 h-4 w-4 text-green-500" />
                             {idea?.countVotes || 0}
                         </Button>

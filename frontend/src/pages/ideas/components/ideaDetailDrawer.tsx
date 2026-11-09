@@ -18,6 +18,8 @@ export function IdeaDetailDrawer({open, onOpenChange, ideaId}: IdeaDetailDrawerP
     const [getIdeaQuery, {data, loading}] = useLazyQuery<{getIdea: Idea}>(GET_IDEA)
 
     useEffect(() => {
+        if (!open || !ideaId) return
+        
         getIdeaQuery({
             variables: {
                 ideaId

@@ -1,8 +1,31 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Edit, Trash2, Crown, User as UserIcon } from "lucide-react"
+import { Edit, Trash2, Crown, User as UserIcon, ShieldCheck, Eye } from "lucide-react"
 import type { User } from "@/types"
+
+const roleConfig = {
+  owner: {
+    label: "Owner",
+    className: "bg-amber-100 text-amber-700",
+    icon: ShieldCheck,
+  },
+  admin: {
+    label: "Admin",
+    className: "bg-purple-100 text-purple-700",
+    icon: Crown,
+  },
+  member: {
+    label: "Membro",
+    className: "bg-emerald-100 text-emerald-700",
+    icon: UserIcon,
+  },
+  viewer: {
+    label: "Leitor",
+    className: "bg-gray-100 text-gray-700",
+    icon: Eye,
+  }
+}
 
 interface MemberCardProps {
   member: User
@@ -26,7 +49,7 @@ export function MemberCard({
       .slice(0, 2)
   }
 
-  const isAdmin = member.role === "admin" || member.role === "owner"
+  const role = member.role ? roleConfig[member.role as keyof typeof roleConfig] : null
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -46,26 +69,21 @@ export function MemberCard({
                 <p className="text-sm text-muted-foreground truncate">
                   {member.email}
                 </p>
-                {member.role && (
-                  <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    {isAdmin ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
-                        <Crown className="h-3 w-3" />
-                        Admin
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
-                        <UserIcon className="h-3 w-3" />
-                        Membro
-                      </span>
-                    )}
-                    {isCurrentUser && (
-                      <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-                        Você
-                      </span>
-                    )}
-                  </div>
-                )}
+                
+                <div className="flex items-center gap-2 mt-2 flex-wrap">
+                  {role && (
+                    <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full ${role.className}`}>
+                      <role.icon className="h-3 w-3" />
+                      {role.label}
+                    </span>
+                  )}
+                  {isCurrentUser && (
+                    <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                      Você
+                    </span>
+                  )}
+                </div>
+                
                 {isCurrentUser && !member.role && (
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
                     <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
