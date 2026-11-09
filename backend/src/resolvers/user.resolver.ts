@@ -41,11 +41,6 @@ export class UserResolver {
         return this.userService.deleteUser(id)
     }
 
-    @Query(() => UserModel)
-    async getUser(@Arg('id', () => String) id: string): Promise<UserModel> {
-        return this.userService.findUser(id)
-    }
-
     @Query(() => [UserModel])
     async listUsers(): Promise<UserModel[]> {
         return this.userService.listUsers()

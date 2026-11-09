@@ -20,4 +20,11 @@ export class AuthResolver {
     ): Promise<RegisterOutput>{
         return this.authService.register(data)
     }
+
+    @Mutation(() => String)
+    async refreshToken(
+        @Arg("refreshToken", () => String) refreshToken: string
+    ): Promise<string> {
+        return this.authService.refreshToken(refreshToken)
+    }
 }

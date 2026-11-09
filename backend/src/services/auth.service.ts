@@ -2,7 +2,7 @@ import { prismaClient } from "../../prisma/prisma";
 import { LoginInput, RegisterInput } from "../dtos/input/auth.input";
 import { UserModel } from "../models/user.model";
 import { comparePassword, hasPassword } from "../utils/hash";
-import { signJwt } from "../utils/jwt";
+import { signJwt, verifyJwt } from "../utils/jwt";
 
 export class AuthService {
     async login(data: LoginInput) {
@@ -15,6 +15,7 @@ export class AuthService {
 
         const compare = await comparePassword(data.password, existingUser.password)
         if (!compare) throw new Error('Senha incorreta!')
+
         return this.generateTokens(existingUser)
     }
 
@@ -39,8 +40,48 @@ export class AuthService {
     }
 
     generateTokens(user: UserModel){
-        const token = signJwt({ id: user.id, email: user.email }, '15m')
-        const refreshToken = signJwt({ id: user.id, email: user.email }, '1d')
+        const payload = {
+            id: user.id,
+            email: user.email
+        }
+        const token = signJwt({ ...payload, tokenType: "access" }, '15m', process.env.JWT_SECRET!)
+        const refreshToken = signJwt({ ...payload, tokenType: "refresh" }, '1d', process.env.JWT_REFRESH_SECRET!)
         return { token, refreshToken, user }
+    }
+
+    async refreshToken(refreshToken: string) {
+        try {
+            const decoded = verifyJwt(
+                refreshToken,
+                process.env.JWT_REFRESH_SECRET!
+            )
+
+            if (decoded.tokenType !== "refresh") {
+                throw new Error("Token inválido")
+            }
+
+            const user = await prismaClient.user.findUnique({
+                where: { id: decoded.id }
+            })
+
+            if (!user) {
+                throw new Error("Usuário não encontrado")
+            }
+
+            const token = signJwt(
+                {
+                    id: user.id,
+                    email: user.email,
+                    tokenType: "access"
+                },
+                "15m",
+                process.env.JWT_SECRET!
+            )
+
+            return token
+
+        } catch {
+            throw new Error("Refresh token inválido ou expirado")
+        }
     }
 }

@@ -17,8 +17,10 @@ export const buildContext = async ({ req, res }: ExpressContextFunctionArgument)
         token = authHeader.substring('Bearer '.length)
 
         try {
-            const payload = verifyJwt(token) as JwtPayload
-            user = payload.id
+            const payload = verifyJwt(token, process.env.JWT_SECRET!) as JwtPayload
+            if (payload.tokenType === "access") {
+                user = payload.id
+            }
         } catch (error) {}
     }
 

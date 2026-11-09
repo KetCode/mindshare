@@ -64,6 +64,7 @@ type Mutation {
   deleteIdea(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
   login(data: LoginInput!): LoginOutput!
+  refreshToken(refreshToken: String!): String!
   register(data: RegisterInput!): RegisterOutput!
   toggleVote(ideaId: String!): Boolean!
   updateIdea(data: UpdateIdeaInput!, id: String!): IdeaModel!
