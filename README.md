@@ -1,0 +1,1 @@
+roda um "npm run dev" nas duas pastas que é sucesso ;)
