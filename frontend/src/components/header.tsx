@@ -24,14 +24,14 @@ export function Header() {
                     <div className="min-w-48">
                         <img src={logoIcon} alt="logo" />
                     </div>
-                    <div className="flex items-center gap-4">
-                        <Link to="/"><Button size="sm" className="gap-2" variant={isIdeasPage ? "default" : "ghost"}><Lightbulb className="h-4 w-4" />Ideias</Button></Link>
-                        <Link to="/members"><Button size="sm" className="gap-2" variant={isMembersPage ? "default" : "ghost"}><Users className="h-4 w-4" />Membros</Button></Link>
+                    <div className="flex items-center gap-2">
+                        <Link to="/"><Button size="default" className="gap-2" variant={isIdeasPage ? "default" : "ghost"}><Lightbulb className="h-4 w-4" />Ideias</Button></Link>
+                        <Link to="/members"><Button size="default" className="gap-2" variant={isMembersPage ? "default" : "ghost"}><Users className="h-4 w-4" />Usuários</Button></Link>
                     </div>
 
                     <div className="flex items-center gap-2">
                         <div className="flex items-center gap-2">
-                            <Avatar>
+                            <Avatar className="h-8 w-8 flex-shrink-0">
                                 <AvatarFallback className="bg-zinc-950 text-primary-foreground">{user?.name?.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">
