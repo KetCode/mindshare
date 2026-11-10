@@ -8,6 +8,9 @@ export class CreateUserInput {
 
     @Field(() => String)
     email!: string
+
+    @Field(() => String, { nullable: true })
+    role?: string
 }
 
 @InputType()

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { User } from "@/types"
 import { useMutation } from "@apollo/client/react"
 import { UPDATE_USER } from "@/lib/graphql/mutations/Members"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface EditMemberDialogProps {
   open: boolean
@@ -70,19 +71,24 @@ export function EditMemberDialog({ open, onOpenChange, member, onUpdated }: Edit
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="edit-name">Nome</Label>
-            <Input id="edit-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="edit-role">Papel</Label>
-            <select id="edit-role" className="w-full border rounded-md h-10 px-3 bg-background" value={role} onChange={(e) => setRole(e.target.value)}>
-              {ROLE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
+            <Input id="edit-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome" className="h-10" />
           </div>
           <div className="space-y-2">
             <Label>E-mail</Label>
-            <Input value={member?.email ?? ""} disabled />
+            <Input value={member?.email ?? ""} className="h-10" disabled />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="edit-role">Permissão</Label>
+            <Select value={role} onValueChange={setRole}>
+              <SelectTrigger className="w-full h-10 bg-gray-50 border-gray-300 rounded-lg shadow-sm focus:ring-0">
+                <SelectValue placeholder="Selecione uma permissão" />
+              </SelectTrigger>
+              <SelectContent>
+              {ROLE_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+              ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <DialogFooter>

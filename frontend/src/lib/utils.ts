@@ -19,7 +19,7 @@ export function formatRelativeDate(date: Date | string): string {
   }
 
   if (diffInMinutes < 60) {
-    return `Há ${diffInMinutes} ${diffInMinutes === 1 ? "minuto" : "minutos"}`
+    return `Há ${diffInMinutes} ${diffInMinutes === 1 ? "minuto" : "min"}`
   }
 
   if (diffInHours < 24) {
@@ -30,5 +30,20 @@ export function formatRelativeDate(date: Date | string): string {
     return "Ontem"
   }
 
+  if (diffInDays >= 30) {
+  const diffInMonths = Math.floor(diffInDays / 30)
+
+  return `Há ${diffInMonths} ${diffInMonths === 1 ? "mês" : "meses"}`
+}
+
   return `Há ${diffInDays} ${diffInDays === 1 ? "dia" : "dias"}`
 }
+
+export const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
+  }

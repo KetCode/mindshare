@@ -1,5 +1,6 @@
 import { prismaClient } from "../../prisma/prisma";
 import { CreateUserInput, UpdateUserInput } from "../dtos/input/user.input";
+import { Role } from "../models/user.model";
 
 export class UserService {
     async createUser(data: CreateUserInput) {
@@ -13,7 +14,8 @@ export class UserService {
         return prismaClient.user.create({
             data: {
                 name: data.name,
-                email: data.email
+                email: data.email,
+                role: (data.role as Role) ?? undefined
             }
         })
     }

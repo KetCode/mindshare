@@ -26,6 +26,7 @@ input CreateIdeaInput {
 input CreateUserInput {
   email: String!
   name: String!
+  role: String
 }
 
 """

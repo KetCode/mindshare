@@ -11,18 +11,17 @@ import { toast } from "sonner"
 interface CreateIdeaDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    onUpdated: () => void
 }
 
-export function CreateIdeaDialog({
-    open,
-    onOpenChange,
-}: CreateIdeaDialogProps) {
+export function CreateIdeaDialog({ open, onOpenChange, onUpdated }: CreateIdeaDialogProps) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
     const [ createIdea, { loading }] = useMutation(CREATE_IDEA, {
         onCompleted() {
             toast.success("Idea criada com sucesso")
+            onUpdated()
             onOpenChange(false)
         },
         onError(error) {
@@ -57,7 +56,7 @@ export function CreateIdeaDialog({
                     <DialogDescription className="text-sm text-muted-foreground">Adicione uma nova ideia para seu time</DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-5 mt-6">
+                <form onSubmit={handleSubmit} className="space-y-5 mt-4">
                     <div className="space-y-1">
                         <Label htmlFor="title" className="text-sm font-normal">Título</Label>
                         <Input id="title" placeholder="Dê um nome para sua ideia" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full" disabled={loading} />
