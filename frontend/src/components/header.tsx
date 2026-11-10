@@ -11,6 +11,7 @@ export function Header() {
     const navigate = useNavigate()
     const isIdeasPage = location.pathname === "/"
     const isMembersPage = location.pathname === "/members"
+    const isRestrictedRole = user?.role === "membro" || user?.role === "viewer"
 
     const handleLogout = () => {
         logout()
@@ -26,7 +27,9 @@ export function Header() {
                     </div>
                     <div className="flex items-center gap-2">
                         <Link to="/"><Button size="default" className="gap-2" variant={isIdeasPage ? "default" : "ghost"}><Lightbulb className="h-4 w-4" />Ideias</Button></Link>
-                        <Link to="/members"><Button size="default" className="gap-2" variant={isMembersPage ? "default" : "ghost"}><Users className="h-4 w-4" />Usuários</Button></Link>
+                        {!isRestrictedRole && (
+                            <Link to="/members"><Button size="default" className="gap-2" variant={isMembersPage ? "default" : "ghost"}><Users className="h-4 w-4" />Usuários</Button></Link>
+                        )}    
                     </div>
 
                     <div className="flex items-center gap-2">
