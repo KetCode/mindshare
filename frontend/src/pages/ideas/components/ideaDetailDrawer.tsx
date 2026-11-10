@@ -4,11 +4,12 @@ import { GET_IDEA } from "@/lib/graphql/queries/ideia"
 import { Idea } from "@/types"
 import { useLazyQuery, useMutation } from "@apollo/client/react"
 import { X } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { CommentsList } from "./CommentsList"
 import { CommentArea } from "./CommentArea"
 import { VOTE_IDEA } from "@/lib/graphql/mutations/Vote"
 import { toast } from "sonner"
+import { COMMENT_IDEA } from "@/lib/graphql/mutations/Comment"
 
 interface IdeaDetailDrawerProps {
     ideaId: string | null
@@ -17,8 +18,13 @@ interface IdeaDetailDrawerProps {
 }
 
 export function IdeaDetailDrawer({open, onOpenChange, ideaId}: IdeaDetailDrawerProps) {
+    const [commentContent, setCommentContent] = useState("")
     const [getIdeaQuery, {data, loading}] = useLazyQuery<{getIdea: Idea}>(GET_IDEA)
     const [voteIdeaMutation, {loading: voting}] = useMutation(VOTE_IDEA, {
+        refetchQueries: [GET_IDEA],
+        awaitRefetchQueries: true,
+    })
+    const [commentIdeaMutation, {loading: commenting}] = useMutation(COMMENT_IDEA, {
         refetchQueries: [GET_IDEA],
         awaitRefetchQueries: true,
     })
@@ -50,6 +56,28 @@ export function IdeaDetailDrawer({open, onOpenChange, ideaId}: IdeaDetailDrawerP
         }
     }
 
+    const handleAddComment = async () => {
+        const content = commentContent.trim()
+        if (!ideaId || !content || commenting) return
+
+        try {
+            await commentIdeaMutation({
+                variables: {
+                    ideaId,
+                    data: {
+                        content
+                    }
+                }
+            })
+
+            setCommentContent("")
+            toast.success("Comentário adicionado com sucesso")
+        } catch (error: any) {
+            toast.error("Não foi possível adicionar o comentário")
+            console.error(error)
+        }
+    }
+
     return (
         <Drawer open={open} onOpenChange={onOpenChange} direction="right">
             <DrawerContentRight className="flex flex-col">
@@ -66,7 +94,7 @@ export function IdeaDetailDrawer({open, onOpenChange, ideaId}: IdeaDetailDrawerP
             <div className="flex-1 overflow-y-auto p-8 space-y-8">
                 <CommentsList comments={idea?.comments || []} loading={loading && !idea} />
             </div>
-            <CommentArea commentContent={""} setCommentContent={console.log} handleAddComment={console.log} handleVote={handleVote} idea={idea} voting={voting} />
+            <CommentArea commentContent={commentContent} setCommentContent={setCommentContent} handleAddComment={handleAddComment} handleVote={handleVote} idea={idea} voting={voting} commenting={commenting} />
             </DrawerContentRight>
         </Drawer>
     )
