@@ -12,19 +12,24 @@ import { IdeaDetailDrawer } from "./components/ideaDetailDrawer";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StatsBagdes } from "@/components/statsBadges";
 import { useAuthStore } from "@/stores/auth";
+import { DeleteIdeaDialog } from "./components/deleteIdeaDialog";
 
 export function IdeasPage () {
     const [openDialog, setOpenDialog] = useState(false)
     const [openDrawer, setOpenDrawer] = useState(false)
     const {data, loading, refetch} = useQuery<{ listIdeas: Idea[] }>(LIST_IDEIAS)
     const [selectedIdeaId, setSelectedIdeaId] = useState<string | null>(null)
+    const [editIdea, setEditIdea] = useState<string | null>(null)
+    const [deleteIdea, setDeleteIdea] = useState<string | null>(null)
     const [dateOrder, setDateOrder] = useState<"newest" | "oldest">("newest")
-
+    
     const ideas = data?.listIdeas || []
     const currentUserId = useAuthStore((state) => state.user?.id)
-
+    
     const commentsCount = ideas.reduce((total, idea) => total + (idea.comments?.length ?? 0), 0)
     const votesCount = ideas.reduce((total, idea) => total + (idea.votes?.length ?? 0), 0)
+    const editIdeaData = ideas.find((idea) => idea.id === editIdea)
+    const deleteIdeaData = ideas.find((idea) => idea.id === deleteIdea) ?? null
 
     const handleIdeaClick = (ideaId: string) => {
         setSelectedIdeaId(ideaId)
@@ -94,7 +99,7 @@ export function IdeasPage () {
 
                         <div className="h-8 w-px bg-gray-200" />
 
-                        <Button onClick={() => setOpenDialog(true)}>
+                        <Button onClick={() => {setEditIdea(null); setOpenDialog(true)}}>
                             <Plus className="mr-2 h-4 w-4" />
                             Nova ideia
                         </Button>
@@ -104,7 +109,7 @@ export function IdeasPage () {
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 pt-6">
                 {filteredIdeas.map((idea) => (
-                    <IdeaCard key={idea.id} idea={idea} isCurrentUser={idea.authorId === currentUserId} onClick={() => handleIdeaClick(idea.id)} />
+                    <IdeaCard key={idea.id} idea={idea} isCurrentUser={idea.authorId === currentUserId} onClick={() => handleIdeaClick(idea.id)} onEdit={() => setEditIdea(idea.id)} onDelete={() => setDeleteIdea(idea.id)}/>
                 ))}
             </div>
 
@@ -124,7 +129,20 @@ export function IdeasPage () {
 
             <IdeaDetailDrawer open={openDrawer} onOpenChange={setOpenDrawer} ideaId={selectedIdeaId} />
 
-            <CreateIdeaDialog open={openDialog} onOpenChange={setOpenDialog} onUpdated={refetch} />
+            <CreateIdeaDialog 
+                open={openDialog || !!editIdea}
+                onOpenChange={(open) => {
+                    setOpenDialog(open)
+                    if (!open) setEditIdea(null)
+                }}
+                onUpdated={() => {
+                    refetch()
+                    setOpenDialog(false)
+                    setEditIdea(null)
+                }}
+                idea={editIdeaData}
+            />
+            <DeleteIdeaDialog open={!!deleteIdea} onOpenChange={(open) => { if (!open) setDeleteIdea(null) }} idea={deleteIdeaData} />
         </Page>
     )
 }

@@ -3,18 +3,20 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation } from '@apollo/client/react'
-import { CREATE_IDEA } from "@/lib/graphql/mutations/Idea"
+import { CREATE_IDEA, UPDATE_IDEA } from "@/lib/graphql/mutations/Idea"
 import { toast } from "sonner"
+import { Idea } from "@/types"
 
 interface CreateIdeaDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     onUpdated: () => void
+    idea?: Idea
 }
 
-export function CreateIdeaDialog({ open, onOpenChange, onUpdated }: CreateIdeaDialogProps) {
+export function CreateIdeaDialog({ open, onOpenChange, onUpdated, idea }: CreateIdeaDialogProps) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
@@ -30,16 +32,40 @@ export function CreateIdeaDialog({ open, onOpenChange, onUpdated }: CreateIdeaDi
         }
     })
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [updateIdea, { loading: updating }] = useMutation(UPDATE_IDEA, {
+        onCompleted() {
+            toast.success("Ideia atualizada com sucesso")
+            onUpdated()
+            onOpenChange(false)
+        },
+        onError(error) {
+            toast.error("Falha ao editar a ideia")
+            console.log(error)
+        }
+    })
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        createIdea({
-            variables: {
-                data: {
-                    title,
-                    description,
+        if (idea) {
+            await updateIdea({
+                variables: {
+                    id: idea.id,
+                    data: {
+                        title,
+                        description
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            await createIdea({
+                variables: {
+                    data: {
+                        title,
+                        description,
+                    }
+                }
+            })
+        }
     }
 
     const handleCancel = () => {
@@ -48,9 +74,16 @@ export function CreateIdeaDialog({ open, onOpenChange, onUpdated }: CreateIdeaDi
         onOpenChange(false)
     }
 
+    useEffect(() => {
+        if (open) {
+            setTitle(idea?.title ?? "")
+            setDescription(idea?.description ?? "")
+        }
+    }, [idea, open])
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
+            <DialogContent onOpenAutoFocus={(event) => event.preventDefault()}>
                 <DialogHeader className="space-y-2">
                     <DialogTitle className="text-2xl font-bold leading-tight">Compartilhe sua ideia</DialogTitle>
                     <DialogDescription className="text-sm text-muted-foreground">Adicione uma nova ideia para seu time</DialogDescription>
@@ -69,7 +102,7 @@ export function CreateIdeaDialog({ open, onOpenChange, onUpdated }: CreateIdeaDi
 
                     <div className="flex justify-end gap-3 pt-2">
                         <Button type="button" variant="outline" onClick={handleCancel}>Cancelar</Button>
-                        <Button type="submit" disabled={!title || loading}>Salvar</Button>
+                        <Button type="submit" disabled={!title.trim() || loading || updating}>Salvar</Button>
                     </div>
                 </form>
             </DialogContent>

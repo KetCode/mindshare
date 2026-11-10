@@ -71,7 +71,6 @@ export function IdeaDetailDrawer({open, onOpenChange, ideaId}: IdeaDetailDrawerP
             })
 
             setCommentContent("")
-            toast.success("Comentário adicionado com sucesso")
         } catch (error: any) {
             toast.error("Não foi possível adicionar o comentário")
             console.error(error)
