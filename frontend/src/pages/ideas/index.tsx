@@ -68,17 +68,23 @@ export function IdeasPage () {
 
                     <div className="flex items-center gap-4">
                         <Select value={dateOrder} onValueChange={(e) => setDateOrder(e as "newest" | "oldest")}>
-                            <SelectTrigger className="w-44 h-9 bg-gray-50 border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-900 [&>svg:last-child]:hidden focus:ring-0">
-                                { dateOrder === "newest" ? (
-                                    <CalendarArrowDown className="h-4 w-4 text-gray-700" />
-                                ) : (
-                                    <CalendarArrowUp className="h-4 w-4 text-gray-700" />
-                                )}
-                                <SelectValue />
-                                <ChevronsUpDown className="h-4 w-4 text-gray-700" />
+                            <SelectTrigger className="w-44 h-9 bg-gray-50 border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-900 [&>svg:last-child]:hidden [&>span]:flex-1 focus:ring-0">
+                                <SelectValue>
+                                    <span className="flex w-full items-center justify-between gap-2">
+                                        { dateOrder === "newest" ? (
+                                            <CalendarArrowDown className="h-4 w-4 text-gray-700" />
+                                        ) : (
+                                            <CalendarArrowUp className="h-4 w-4 text-gray-700" />
+                                        )}
+                                        
+                                        {dateOrder === "newest" ? "Mais recentes" : "Mais antigos"}
+                                        
+                                        <ChevronsUpDown className="h-4 w-4 text-gray-700" />
+                                    </span>
+                                </SelectValue>
                             </SelectTrigger>
 
-                            <SelectContent position="item-aligned" className="w-[179px] -ml-[35px]">
+                            <SelectContent position="item-aligned" className="w-44 min-w-44 -ml-px">
                                 <SelectGroup>
                                     <SelectItem value="newest">Mais recentes</SelectItem>
                                     <SelectItem value="oldest">Mais antigos</SelectItem>
