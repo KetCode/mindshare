@@ -32,54 +32,58 @@ export function Login() {
     }
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)] items-center justify-center gap-6">
-            <img src={logo} className="w-64 h-22" alt="Logo" />
-            <Card className="w-full max-w-md rounded-xl">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Acesse a plataforma</CardTitle>
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] items-center justify-center gap-3">
+            <img src={logo} className="w-64 h-22 mb-3" alt="Logo" />
+            <Card className="w-full max-w-sm rounded-xl">
+                <CardHeader className="p-7">
+                    <CardTitle className="text-lg font-medium">Acesse a plataforma</CardTitle>
                     <CardDescription>Entre usando seu e-mail e senha cadastrados</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="seu@email.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
+                <CardContent className="px-7 pb-7">
+                    <form onSubmit={handleSubmit} className="space-y-7">
+                        <div className="space-y-4">
+                            <div>
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="example@mail.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="h-10"
+                                    required
+                                    />
+                            </div>
+                            <div>
+                                <Label htmlFor="password">Senha</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    placeholder="Digite sua senha"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="h-10"
+                                    required
+                                    />
+                            </div>
                         </div>
-                        <div>
-                            <Label htmlFor="password">Senha</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="********"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <Button type="submit" className="w-full" disabled={!email || !password || loading}>
+                        <Button type="submit" className="w-full h-10" disabled={!email || !password || loading}>
                             Entrar
                         </Button>
                     </form>
                 </CardContent>
             </Card>
-            <Card className="w-full max-w-md rounded-xl">
-                <CardHeader>
-                <CardTitle className="text-2xl font-bold">
-                    Ainda não tem uma conta?
-                </CardTitle>
-                <CardDescription>Cadastre-se agora mesmo</CardDescription>
+            <Card className="w-full max-w-sm rounded-xl">
+                <CardHeader className="px-7 pt-7 pb-5 space-y-0">
+                    <CardTitle className="text-lg font-medium">
+                        Ainda não tem uma conta?
+                    </CardTitle>
+                    <CardDescription>Cadastre-se agora mesmo</CardDescription>
                 </CardHeader>
-                <CardContent>
-                <Button variant="outline" className="w-full" asChild>
-                    <Link to="/signup"> Criar conta </Link>
-                </Button>
+                <CardContent className="px-7 pb-7">
+                    <Button variant="secondary" className="w-full h-10 text-gray-700 border border-gray-200" asChild>
+                        <Link to="/signup"> Criar conta </Link>
+                    </Button>
                 </CardContent>
             </Card>
         </div>

@@ -41,62 +41,67 @@ export function Signup() {
   return (
     <div className="flex items-center min-h-[calc(100vh-4rem)] justify-center flex-col gap-6">
       <img src={logo} className="w-64 h-22" />
-      <Card className="w-full max-w-md rounded-xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">Crie sua conta</CardTitle>
+      <Card className="w-full max-w-sm rounded-xl">
+        <CardHeader className="p-7">
+          <CardTitle className="text-lg font-medium">Crie sua conta</CardTitle>
           <CardDescription>
             Informe seu nome, e-email e senha de acesso
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Nome</Label>
-              <Input
-                id="name"
-                placeholder="Seu nome"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+        <CardContent className="px-7 pb-7">
+          <form onSubmit={handleSubmit} className="space-y-7">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <Label htmlFor="email">Nome</Label>
+                <Input
+                  id="name"
+                  placeholder="Digite seu nome"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="h-10"
+                  required
+                  />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="example@mail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-10"
+                  required
+                  />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="email">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Digite sua senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-10"
+                  required
+                  />
+                </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="*******"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={!name || !email || !password || loading}>
+            <Button type="submit" className="w-full h-10" disabled={!name || !email || !password || loading}>
               Cadastrar
             </Button>
           </form>
         </CardContent>
       </Card>
-      <Card className="w-full max-w-md rounded-xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">
+      <Card className="w-full max-w-sm rounded-xl">
+        <CardHeader className="px-7 pt-7 pb-5 space-y-0">
+          <CardTitle className="text-lg font-mediumbold">
             Já tem uma conta?
           </CardTitle>
           <CardDescription>Entre agora mesmo</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Button variant="outline" className="w-full" asChild>
+        <CardContent className="px-7 pb-7">
+          <Button variant="outline" className="w-full h-10" asChild>
             <Link to="/login">Acessar conta</Link>
           </Button>
         </CardContent>
