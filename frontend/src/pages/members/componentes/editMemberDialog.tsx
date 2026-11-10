@@ -7,6 +7,7 @@ import { User } from "@/types"
 import { useMutation } from "@apollo/client/react"
 import { UPDATE_USER } from "@/lib/graphql/mutations/Members"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useAuthStore } from "@/stores/auth"
 
 interface EditMemberDialogProps {
   open: boolean
@@ -25,6 +26,16 @@ const ROLE_OPTIONS = [
 export function EditMemberDialog({ open, onOpenChange, member, onUpdated }: EditMemberDialogProps) {
   const [name, setName] = useState("")
   const [role, setRole] = useState<string>("member")
+
+  const { user } = useAuthStore()
+
+  const availableRoles = ROLE_OPTIONS.filter((role) => {
+    if (user?.role === "admin" && role.value === "owner") {
+      return false
+    }
+
+    return true
+  })
 
   useEffect(() => {
     setName(member?.name ?? "")
@@ -83,10 +94,10 @@ export function EditMemberDialog({ open, onOpenChange, member, onUpdated }: Edit
               <SelectTrigger className="w-full h-10 bg-gray-50 border-gray-300 rounded-lg shadow-sm focus:ring-0">
                 <SelectValue placeholder="Selecione uma permissão" />
               </SelectTrigger>
-              <SelectContent>
-              {ROLE_OPTIONS.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-              ))}
+              <SelectContent position="item-aligned" >
+                {availableRoles.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
