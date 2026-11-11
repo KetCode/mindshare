@@ -6,13 +6,13 @@ import { DELETE_IDEA } from "@/lib/graphql/mutations/Idea"
 import { LIST_IDEIAS } from "@/lib/graphql/queries/ideia"
 import { toast } from "sonner"
 
-interface DeleteIdealDialogProps {
+interface DeleteIdeaDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   idea: Idea | null
 }
 
-export function DeleteIdeaDialog({ open, onOpenChange, idea }: DeleteIdealDialogProps) {
+export function DeleteIdeaDialog({ open, onOpenChange, idea }: DeleteIdeaDialogProps) {
   const [deleteIdeaMutation, { loading }] = useMutation(DELETE_IDEA, {
     onCompleted: () => {
       onOpenChange(false)

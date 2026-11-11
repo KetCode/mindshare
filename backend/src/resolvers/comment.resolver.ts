@@ -1,7 +1,7 @@
 import { Arg, FieldResolver, Mutation, Resolver, Root } from "type-graphql";
 import { CommentModel } from "../models/comment.model";
 import { CommentService } from "../services/comment.service";
-import { CreateCommentInput } from "../dtos/input/comment.input";
+import { CreateCommentInput, UpdateCommentInput } from "../dtos/input/comment.input";
 import { GqlUser } from "../graphql/decorators/user.decorator";
 import { User } from "@prisma/client";
 import { IdeaModel } from "../models/idea.model";
@@ -22,6 +22,24 @@ export class CommentResolver {
         @GqlUser() user: User
     ): Promise<CommentModel> {
         return this.commentService.create(ideaId, user.id, data)
+    }
+
+    @Mutation(() => CommentModel)
+    async updateComment(
+        @Arg('id', () => String) id: string,
+        @Arg('data', () => UpdateCommentInput) data: UpdateCommentInput,
+        @GqlUser() user: User
+    ): Promise<CommentModel> {
+        return this.commentService.updateComment(id, user.id, data)
+    }
+
+    @Mutation(() => Boolean)
+    async deleteComment(
+        @Arg('id', () => String) id: string,
+        @GqlUser() user: User
+    ): Promise<boolean> {
+        await this.commentService.deleteComment(id, user.id)
+        return true
     }
 
     @FieldResolver(() => IdeaModel)

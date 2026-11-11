@@ -62,12 +62,14 @@ type Mutation {
   createComment(data: CreateCommentInput!, ideaId: String!): CommentModel!
   createIdea(data: CreateIdeaInput!): IdeaModel!
   createUser(data: CreateUserInput!): UserModel!
+  deleteComment(id: String!): Boolean!
   deleteIdea(id: String!): Boolean!
   deleteUser(id: String!): Boolean!
   login(data: LoginInput!): LoginOutput!
   refreshToken(refreshToken: String!): String!
   register(data: RegisterInput!): RegisterOutput!
   toggleVote(ideaId: String!): Boolean!
+  updateComment(data: UpdateCommentInput!, id: String!): CommentModel!
   updateIdea(data: UpdateIdeaInput!, id: String!): IdeaModel!
   updateUser(data: UpdateUserInput!, id: String!): UserModel!
 }
@@ -97,6 +99,10 @@ enum Role {
   member
   owner
   viewer
+}
+
+input UpdateCommentInput {
+  content: String!
 }
 
 input UpdateIdeaInput {
